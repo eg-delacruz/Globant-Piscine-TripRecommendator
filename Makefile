@@ -3,13 +3,18 @@
 # Variables
 COMPOSE_FILE := docker-compose.yml
 CONTAINER_NAME := vite-dev
+SERVICE_NAME := dev
 PROJECT_DIR := my-app
 
 # --- Core Development Rule ---
 dev: up install-deps
 	@echo "--- Starting Vite development server ---"
 	# Access the running container and start the dev server
-	docker compose exec $(CONTAINER_NAME) sh -c "cd $(PROJECT_DIR) && npm run dev"
+	docker compose exec $(SERVICE_NAME) sh -c "cd $(PROJECT_DIR) && npm run dev"
+
+enter_vite_container:
+	@echo "--- Entering Vite Development Container ---"
+	docker compose exec $(SERVICE_NAME) sh
 
 # --- Docker Compose Management ---
 
@@ -28,13 +33,11 @@ down:
 
 # This rule handles project creation and dependency installation
 install-deps:
-	# Check if the project folder exists inside the container
-	# If not, create the Vite app and install dependencies.
-	@docker compose exec $(CONTAINER_NAME) sh -c 'if [ ! -d "$(PROJECT_DIR)" ]; then \
-		echo "--- Setting up new Vite project and installing dependencies ---"; \
-		npm create vite@latest $(PROJECT_DIR) -- --template react-ts && \
-		cd $(PROJECT_DIR) && \
-		npm install; \
-	else \
-		echo "--- Dependencies already installed or project exists ---"; \
-	fi'
+	@echo "--- Ensuring project is set up and dependencies are installed/updated ---"
+	@docker compose exec $(SERVICE_NAME) sh -c 'if [ ! -d "$(PROJECT_DIR)" ]; then \
+	    echo "--- Project directory missing. Running npm create vite ---"; \
+	    npm create vite@latest $(PROJECT_DIR) -- --template react-ts; \
+	fi && \
+	cd $(PROJECT_DIR) && \
+	echo "--- Running npm install to ensure dependencies are up-to-date ---" && \
+	npm install'
