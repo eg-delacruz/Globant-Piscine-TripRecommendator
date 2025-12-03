@@ -1,0 +1,15 @@
+services:
+  # Development service
+  dev:
+    build:
+      context: .
+      dockerfile: Dockerfile.dev
+    ports:
+      - "5173:5173" # Vite dev server
+    volumes:
+      - .:/app # Mount your project directory
+      - /app/node_modules # Prevent overwriting node_modules
+    container_name: vite-dev
+    command: sh -c "tail -f /dev/null" # Keep container running
+    stdin_open: true
+    tty: true
