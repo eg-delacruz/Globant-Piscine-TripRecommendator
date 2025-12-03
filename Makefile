@@ -1,21 +1,40 @@
-.PHONY: setup start stop restart clean shell logs
+.PHONY: dev up down clean install-deps
 
-# First-time setup: create container and initialize project
-# setup:
-# 	docker-compose up -d
-# 	docker-compose exec dev sh -c "npm create vite@latest . -- --template react && npm install"
-# 	@echo "Setup complete! Run 'make start' to start the dev server"
+# Variables
+COMPOSE_FILE := docker-compose.yml
+CONTAINER_NAME := vite-dev
+PROJECT_DIR := my-app
 
-# Start the dev server
-start:
-	docker-compose up -d
-	docker-compose exec dev sh -c "cd my-app && npm install && npm run dev"
+# --- Core Development Rule ---
+dev: up install-deps
+	@echo "--- Starting Vite development server ---"
+	# Access the running container and start the dev server
+	docker compose exec $(CONTAINER_NAME) sh -c "cd $(PROJECT_DIR) && npm run dev"
 
-# View logs
-logs:
-	docker-compose logs -f dev
+# --- Docker Compose Management ---
 
-# Clean everything (removes containers, images, volumes)
-clean:
-	docker-compose down -v
-	docker system prune -f
+# Starts the containers, rebuilding if necessary
+up:
+	@echo "--- Building and Starting Docker Containers ---"
+	# Use --build to automatically build the image if it doesn't exist
+	docker compose up --build -d
+
+# Stops and removes containers, networks, and volumes
+down:
+	@echo "--- Stopping and Removing Containers ---"
+	docker compose down
+
+# --- Project Setup (Run inside the container) ---
+
+# This rule handles project creation and dependency installation
+install-deps:
+	# Check if the project folder exists inside the container
+	# If not, create the Vite app and install dependencies.
+	@docker compose exec $(CONTAINER_NAME) sh -c 'if [ ! -d "$(PROJECT_DIR)" ]; then \
+		echo "--- Setting up new Vite project and installing dependencies ---"; \
+		npm create vite@latest $(PROJECT_DIR) -- --template react-ts && \
+		cd $(PROJECT_DIR) && \
+		npm install; \
+	else \
+		echo "--- Dependencies already installed or project exists ---"; \
+	fi'
