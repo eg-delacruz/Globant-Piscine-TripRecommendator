@@ -17,3 +17,11 @@ cd my-react-app
 npm install -D tailwindcss@3 postcss autoprefixer
 3. To initialize tailwindcss:
 npx tailwindcss init -p
+
+
+------ Tailwind ------
+sm:  640px   (small tablets)
+md:  768px   (tablets)
+lg:  1024px  (laptops)
+xl:  1280px  (desktops)
+2xl: 1536px  (large desktops)

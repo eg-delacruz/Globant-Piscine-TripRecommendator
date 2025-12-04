@@ -1,6 +1,4 @@
-import './App.css';
-
-function App() {
+function Home() {
   return (
     <div className='min-h-screen flex items-center justify-center bg-gradient-to-br from-white to-gray-50'>
       <div className='max-w-lg p-8 bg-white rounded-xl shadow-md'>
@@ -21,4 +19,4 @@ function App() {
   );
 }
 
-export default App;
+export default Home;
