@@ -10,8 +10,10 @@ Globant piscine project intended to develop a trip recomendator app using React,
 
 ---------- For me now -----------
 
-1. docker-compose up -d -> Mount the container
-2. docker-compose exec dev sh -> Access the container (Why do I write "dev" here?)
-3. npm create vite@latest my-app -- --template react-ts -> Create the Vite React TS project
-4. cd my-app -> Access the project folder
-5. npm run dev -> Start the development server
+1. To create the vite app:
+npm create vite@latest my-react-app -- --template react-ts
+2. To install tailwindcss:
+cd my-react-app
+npm install -D tailwindcss@3 postcss autoprefixer
+3. To initialize tailwindcss:
+npx tailwindcss init -p
