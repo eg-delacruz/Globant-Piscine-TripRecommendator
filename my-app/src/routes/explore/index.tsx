@@ -27,6 +27,7 @@ export const Index = () => {
     setState((prevState) => ({ ...prevState, error }));
   };
 
+  // TODO: properly handle error state UI + add a retry mechanism
   if (state.error) {
     return <div className='p-4'>{state.error}</div>;
   }
