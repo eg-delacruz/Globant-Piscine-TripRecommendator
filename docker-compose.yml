@@ -10,7 +10,7 @@ services:
       - .:/app # Mount your project directory
       - /app/node_modules # Prevent overwriting node_modules
     container_name: vite-dev
-    command: sh -c "tail -f /dev/null" # Keep container running
+    command: sh -c "cd my-app && npm install && npm run dev" # Keep container running
     stdin_open: true
     tty: true
     networks:
@@ -27,7 +27,7 @@ services:
       - ./backend:/app # Mount your backend directory
       - /app/node_modules # Prevent overwriting node_modules
     container_name: express-backend
-    command: sh -c "tail -f /dev/null" # Keep container running
+    command: sh -c "cd app && npm install && npm run dev" # Keep container running
     stdin_open: true
     tty: true
     environment:

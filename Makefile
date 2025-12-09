@@ -9,10 +9,10 @@ BACK_SERVICE_NAME := backend
 BACK_DIR := app
 
 # --- Core Development Rule ---
-dev: up install-deps
-	@echo "--- Starting Vite development server ---"
-	# Access the running container and start the dev server
-	docker compose exec $(FRONT_SERVICE_NAME) sh -c "cd $(FRONT_DIR) && npm run dev"
+# dev: up install-deps
+# 	@echo "--- Starting Vite development server ---"
+# 	# Access the running container and start the dev server
+# 	docker compose exec $(FRONT_SERVICE_NAME) sh -c "cd $(FRONT_DIR) && npm run dev"
 
 enter_vite_container:
 	@echo "--- Entering Vite Development Container ---"
@@ -26,7 +26,10 @@ enter_express_container:
 
 # Starts the containers, rebuilding if necessary
 up:
-	@echo "--- Building and Starting Docker Containers ---"
+	@echo "--- Both servers are running ---"
+	@echo "Frontend: http://localhost:5173"
+	@echo "Backend: http://localhost:3000"
+	@echo "View logs with: make logs"
 	# Use --build to automatically build the image if it doesn't exist
 	docker compose up --build -d
 
