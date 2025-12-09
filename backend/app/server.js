@@ -7,7 +7,7 @@ app.use(express.json());
 
 app.get('/api/open_ai', (req, res) => {
   res.json({
-    greeting: 'Hello from Expresssss!',
+    greeting: 'Hello from Express!',
     status: 'success',
   });
 });
