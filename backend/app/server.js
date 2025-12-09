@@ -1,10 +1,18 @@
-require('dotenv').config();
+import dotenv from 'dotenv';
+import express from 'express';
 
-const express = require('express');
+dotenv.config();
+
 const app = express();
+
+// Environment variables
 const PORT = process.env.PORT || 3000;
 const API_KEY = process.env.API_KEY;
 
+// Middleware
+app.use(express.json());
+
+// CORS configuration
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Update to match the domain you will make the request from
   res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
@@ -12,13 +20,21 @@ app.use((req, res, next) => {
   next();
 });
 
-app.get('/api/open_ai', (req, res) => {
-  console.log('Received request with query:', req.query.userInput);
-  console.log('Using API Key:', API_KEY);
-  res.json({
-    greeting: 'Hello from Express!!!!',
-    status: 'success',
-  });
+app.get('/api/open_ai', async (req, res) => {
+  try {
+    // console.log('Received request with query:', req.query.userInput);
+
+    res.json({
+      greeting: 'Hello from Express!!!!',
+      status: 'success',
+    });
+  } catch (error) {
+    console.error('Error communicating with OpenAI:', error);
+    res.status(500).json({
+      status: 'error',
+      message: 'Failed to communicate with OpenAI',
+    });
+  }
 });
 
 // Health check endpoint
