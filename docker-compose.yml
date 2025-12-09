@@ -13,3 +13,29 @@ services:
     command: sh -c "tail -f /dev/null" # Keep container running
     stdin_open: true
     tty: true
+    networks:
+          - app-network
+
+# Backend service
+  backend:
+    build:
+      context: ./backend # Assumes backend code is in ./backend directory
+      dockerfile: ../Dockerfile.backend
+    ports:
+      - "3000:3000" # Express server
+    volumes:
+      - ./backend:/app # Mount your backend directory
+      - /app/node_modules # Prevent overwriting node_modules
+    container_name: express-backend
+    command: sh -c "tail -f /dev/null" # Keep container running
+    stdin_open: true
+    tty: true
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge

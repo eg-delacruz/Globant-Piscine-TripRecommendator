@@ -1,20 +1,26 @@
 .PHONY: dev up down clean install-deps
 
-# Variables
-COMPOSE_FILE := docker-compose.yml
-CONTAINER_NAME := vite-dev
-SERVICE_NAME := dev
-PROJECT_DIR := my-app
+# --- Frontend Vite Development Setup ---
+FRONT_SERVICE_NAME := dev
+FRONT_DIR := my-app
+
+# --- Backend Express Setup ---
+BACK_SERVICE_NAME := backend
+BACK_DIR := app
 
 # --- Core Development Rule ---
 dev: up install-deps
 	@echo "--- Starting Vite development server ---"
 	# Access the running container and start the dev server
-	docker compose exec $(SERVICE_NAME) sh -c "cd $(PROJECT_DIR) && npm run dev"
+	docker compose exec $(FRONT_SERVICE_NAME) sh -c "cd $(FRONT_DIR) && npm run dev"
 
 enter_vite_container:
 	@echo "--- Entering Vite Development Container ---"
-	docker compose exec $(SERVICE_NAME) sh
+	docker compose exec $(FRONT_SERVICE_NAME) sh
+
+enter_express_container:
+	@echo "--- Entering Express Backend Container ---"
+	docker compose exec $(BACK_SERVICE_NAME) sh
 
 # --- Docker Compose Management ---
 
@@ -34,10 +40,17 @@ down:
 # This rule handles project creation and dependency installation
 install-deps:
 	@echo "--- Ensuring project is set up and dependencies are installed/updated ---"
-	@docker compose exec $(SERVICE_NAME) sh -c 'if [ ! -d "$(PROJECT_DIR)" ]; then \
+	@docker compose exec $(FRONT_SERVICE_NAME) sh -c 'if [ ! -d "$(FRONT_DIR)" ]; then \
 	    echo "--- Project directory missing. Running npm create vite ---"; \
-	    npm create vite@latest $(PROJECT_DIR) -- --template react-ts; \
+	    npm create vite@latest $(FRONT_DIR) -- --template react-ts; \
 	fi && \
-	cd $(PROJECT_DIR) && \
+	cd $(FRONT_DIR) && \
+	echo "--- Running npm install to ensure dependencies are up-to-date ---" && \
+	npm install'
+	@docker compose exec $(BACK_SERVICE_NAME) sh -c 'if [ ! -d "$(BACK_DIR)" ]; then \
+	    echo "--- Project directory missing. Setting up Express app ---"; \
+	    mkdir -p $(BACK_DIR) && cd $(BACK_DIR) && npm init -y && npm install express; \
+	fi && \
+	cd $(BACK_DIR) && \
 	echo "--- Running npm install to ensure dependencies are up-to-date ---" && \
 	npm install'

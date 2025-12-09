@@ -1,0 +1,12 @@
+FROM node:20-alpine
+
+WORKDIR /app
+
+# Install dependencies globally for convenience
+RUN npm install -g npm@latest
+
+# Expose Express's default port
+EXPOSE 3000
+
+# Keep container running and allow interactive commands
+CMD ["sh"]
