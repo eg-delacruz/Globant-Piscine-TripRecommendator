@@ -6,6 +6,9 @@ import { Link } from 'react-router';
 // Custom hooks
 import { useInputValue } from '@/hooks/useInputValue.tsx';
 
+//Config
+import { API_URL } from '@/config/api.ts';
+
 type ExploreProps = {
   setLoading: (loading: boolean) => void;
   setRecommendation: (recommendation: Recommendation | null) => void;
@@ -46,9 +49,16 @@ export function Explore({
     setLoading(true);
 
     try {
-      const res = await fetch(
-        `https://pokeapi.co/api/v2/pokemon/${INPUT.value.toLowerCase().trim()}`
-      );
+      const URL = `${API_URL}/api/open_ai?userInput=${encodeURIComponent(
+        INPUT.value
+      )}`;
+
+      const res = await fetch(URL, {
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      });
 
       if (!res.ok) {
         throw new Error('No recommendation found for the given input.');
@@ -58,7 +68,7 @@ export function Explore({
 
       setRecommendation({
         userInput: INPUT.value,
-        text: `You searched for ${data.name}, which is a Pokémon with ID ${data.id}.`,
+        text: `You searched for ${data.greeting}`,
       });
       setLoading(false);
       INPUT.setValue('');

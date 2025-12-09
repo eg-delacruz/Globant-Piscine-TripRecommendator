@@ -1,8 +1,4 @@
-.PHONY: dev up down clean install-deps
-
-# --- Backend Express Setup ---
-BACK_SERVICE_NAME := backend
-BACK_DIR := app
+.PHONY: up down
 
 # --- Docker Compose Management ---
 

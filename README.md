@@ -5,6 +5,7 @@ Globant piscine project intended to develop a trip recomendator app using React,
 ## How to use
 
 1. docker compose up --build -d
+2. Access the frontend at http://localhost:5173 in your web browser.
 
 
 ------ Tailwind ------

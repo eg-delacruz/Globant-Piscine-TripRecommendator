@@ -1,13 +1,22 @@
+require('dotenv').config();
+
 const express = require('express');
 const app = express();
 const PORT = process.env.PORT || 3000;
+const API_KEY = process.env.API_KEY;
 
-// Middleware to parse JSON
-app.use(express.json());
+app.use((req, res, next) => {
+  res.header('Access-Control-Allow-Origin', 'http://localhost:5173'); // Update to match the domain you will make the request from
+  res.header('Access-Control-Allow-Methods', 'GET,POST,PUT,DELETE,OPTIONS');
+  res.header('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+  next();
+});
 
 app.get('/api/open_ai', (req, res) => {
+  console.log('Received request with query:', req.query.userInput);
+  console.log('Using API Key:', API_KEY);
   res.json({
-    greeting: 'Hello from Express!',
+    greeting: 'Hello from Express!!!!',
     status: 'success',
   });
 });

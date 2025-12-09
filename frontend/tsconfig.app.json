@@ -32,7 +32,8 @@
       "@routes/*": ["./src/routes/*"],
       "@styles/*": ["./src/styles/*"],
       "@assets/*": ["./src/assets/*"],
-      "@types/*": ["./src/types/*"]
+      "@types/*": ["./src/types/*"],
+      "@config/*": ["./src/config/*"]
     }
   },
   "include": ["src"]
