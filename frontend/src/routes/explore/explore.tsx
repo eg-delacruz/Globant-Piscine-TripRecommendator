@@ -68,8 +68,9 @@ export function Explore({
 
       setRecommendation({
         userInput: INPUT.value,
-        text: `You searched for ${data.greeting}`,
+        ai_response: data.data,
       });
+
       setLoading(false);
       INPUT.setValue('');
     } catch (error) {
