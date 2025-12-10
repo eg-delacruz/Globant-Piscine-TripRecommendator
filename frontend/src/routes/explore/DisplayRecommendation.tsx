@@ -81,7 +81,14 @@ export function DisplayRecommendation({
               position={[rec.geocode.latitude, rec.geocode.longitude]}
               icon={pinIcon}
             >
-              <Popup>{rec.explanation}</Popup>
+              {/* The popup has to have the city, the country and the explanation */}
+              <Popup>
+                <strong>
+                  {rec.city}, {rec.country}
+                </strong>
+                <br />
+                {rec.explanation}
+              </Popup>
             </Marker>
           ))}
         </MapContainer>
