@@ -2,6 +2,7 @@ import { Loading } from './loading.tsx';
 import { useState } from 'react';
 import { Explore } from './explore.tsx';
 import { DisplayRecommendation } from './DisplayRecommendation.tsx';
+import { Error } from './Error.tsx';
 import type { Recommendation } from '@/types/index.ts';
 
 export const Index = () => {
@@ -27,9 +28,8 @@ export const Index = () => {
     setState((prevState) => ({ ...prevState, error }));
   };
 
-  // TODO: properly handle error state UI + add a retry mechanism
   if (state.error) {
-    return <div className='p-4'>{state.error}</div>;
+    return <Error />;
   }
 
   if (state.loading) return <Loading />;

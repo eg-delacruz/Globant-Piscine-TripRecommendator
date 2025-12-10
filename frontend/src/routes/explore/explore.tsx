@@ -66,6 +66,12 @@ export function Explore({
 
       const data = await res.json();
 
+      if (data.status === 'error') {
+        setError(data.message || 'An unexpected error occurred.');
+        setLoading(false);
+        return;
+      }
+
       setRecommendation({
         userInput: INPUT.value,
         ai_response: data.data,

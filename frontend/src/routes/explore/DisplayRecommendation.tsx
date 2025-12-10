@@ -1,13 +1,22 @@
-import type { Recommendation } from '@/types/index.ts';
-
 // Leaflet js
-import { MapContainer, TileLayer } from 'react-leaflet';
+import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet';
 import 'leaflet/dist/leaflet.css';
+import { Icon } from 'leaflet';
+import pin from '@/assets/alfiler.png';
+import { FitBoundsToMarkers } from './FitBoundsToMarkers.tsx';
+
+import type { Recommendation } from '@/types/index.ts';
 
 type RecommendationsProps = {
   recommendation: Recommendation;
   setRecommendation: (recommendation: Recommendation | null) => void;
 };
+
+const pinIcon = new Icon({
+  iconUrl: pin,
+  iconSize: [38, 38],
+  iconAnchor: [12, 41],
+});
 
 /* 
     Example input: "A place with cheap food and vibrant nightlife in Europe"
@@ -55,20 +64,26 @@ export function DisplayRecommendation({
           </div>
         </div>
 
-        {/* https://www.youtube.com/watch?v=jD6813wGdBA
-        
-        continue from min 10:30 */}
-
         <MapContainer
           center={[48.8566, 2.3522]}
           zoom={13}
           className='mt-4 min-h-80 rounded-xl overflow-hidden'
-          // style={{ minHeight: '100px' }}
         >
+          <FitBoundsToMarkers recommendation={recommendation} />
+
           <TileLayer
             url='https://tile.openstreetmap.org/{z}/{x}/{y}.png'
             attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors &copy; <a href="https://stadiamaps.com/" target="_blank">Stadia Maps</a>'
           />
+          {recommendation.ai_response?.map((rec, index) => (
+            <Marker
+              key={index}
+              position={[rec.geocode.latitude, rec.geocode.longitude]}
+              icon={pinIcon}
+            >
+              <Popup>{rec.explanation}</Popup>
+            </Marker>
+          ))}
         </MapContainer>
 
         <div className='flex-shrink-0 pb-4 mt-4'>
